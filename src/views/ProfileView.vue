@@ -1,6 +1,5 @@
 <template>
   <div class="personal-center-layout">
-    <!-- 页面主区域 -->
     <main class="user-info">
       <a-avatar :size="128" :src="formState.titleUrl" />
       <h2>{{ formState.username }}</h2>
@@ -15,7 +14,6 @@
         name="userForm"
         @finish="onFinish"
       >
-        <!-- 隐藏字段，用于绑定 userId -->
         <a-form-item name="userId" style="display: none">
           <a-input v-model:value="formState.userId" type="hidden" />
         </a-form-item>
@@ -47,14 +45,12 @@ import { ref, onMounted } from 'vue'
 import ApiService from '@/utils/index'
 import { message } from 'ant-design-vue'
 
-// 接口响应类型
 interface ApiResponse<T> {
   code: number;
   data: T;
   msg: string;
 }
 
-// 当前用户数据类型
 interface User {
   userId: number;
   username: string;
@@ -64,7 +60,6 @@ interface User {
   describe: string;
 }
 
-// 用户状态
 const formState = ref<User>({
   userId: 0,
   username: 'admin',
@@ -74,7 +69,6 @@ const formState = ref<User>({
   describe: ''
 })
 
-// 获取当前用户信息
 const getCurrentUser = async () => {
   try {
     const username = localStorage.getItem('currentUser') || ''
@@ -85,19 +79,16 @@ const getCurrentUser = async () => {
   }
 }
 
-// 取消修改用户信息
 const cancel = (e: MouseEvent) => {
   console.log(e)
   message.error('用户取消修改')
 }
 
-// 表单布局配置
 const layout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 20 }
 }
 
-// 提交表单修改用户信息
 const onFinish = async (values: User) => {
   try {
     const response = await ApiService.post<ApiResponse<null>, User>('/user/modify', values)
@@ -136,7 +127,7 @@ onMounted(() => {
   // justify-content: center;
   // align-items: center;
   height: 100%;
-  width: 100%; /* 确保父容器占满宽度 */
+  width: 100%;
 }
 
 </style>

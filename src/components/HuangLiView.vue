@@ -1,26 +1,21 @@
 <template>
   <div class="calendar-container">
-    <!-- 日历头部 -->
     <div class="calendar-header">
       <button @click="changeMonth(-1)">← 上个月</button>
       <h2>{{ currentDate.format('YYYY年MM月') }}</h2>
       <button @click="changeMonth(1)">下个月 →</button>
     </div>
 
-    <!-- 跳转到今天和日期选择 -->
     <div class="calendar-actions">
       <button @click="goToToday">跳转到今天</button>
       <input type="date" v-model="selectedDateInput" @change="onDateChange" />
     </div>
 
-    <!-- 日历主体 -->
     <div class="calendar-grid">
-      <!-- 星期标题 -->
       <div class="calendar-cell header" v-for="day in weekDays" :key="day">
         {{ day }}
       </div>
 
-      <!-- 日历日期 -->
       <div
         class="calendar-cell"
         v-for="date in calendarDays"
@@ -39,7 +34,6 @@
       </div>
     </div>
 
-    <!-- 选中日期详情 -->
     <div class="date-details" v-if="selectedDateDetails">
       <h3>{{ selectedDateDetails.date }}</h3>
       <p>农历: {{ selectedDateDetails.lunar }}</p>
@@ -56,23 +50,17 @@ import 'dayjs/locale/zh-cn'
 dayjs.extend(weekday)
 dayjs.locale('zh-cn')
 
-// 当前显示的月份
 const currentDate = ref(dayjs())
 
-// 用户选择的日期
 const selectedDate = ref(dayjs().format('YYYY-MM-DD'))
 const selectedDateInput = ref(dayjs().format('YYYY-MM-DD'))
 
-// 星期标题
 const weekDays = ['日', '一', '二', '三', '四', '五', '六']
 
-// 农历数据
 const lunarData = ref<Record<string, { lunar: string }>>({})
 
-// 当前选中日期的详细信息
 const selectedDateDetails = ref<{ date: string; lunar: string } | null>(null)
 
-// 生成当前月份的日历数据
 const calendarDays = computed(() => {
   const start = currentDate.value.startOf('month').weekday(0) // 月开始的星期天
   const end = currentDate.value.endOf('month').weekday(6) // 月结束的星期六
@@ -84,19 +72,15 @@ const calendarDays = computed(() => {
   return days
 })
 
-// 是否是今天
 const isToday = (date: dayjs.Dayjs) => date.isSame(dayjs(), 'day')
 
-// 是否是选中的日期
 const isSelectedDate = (date: dayjs.Dayjs) => date.format('YYYY-MM-DD') === selectedDate.value
 
-// 切换月份
 const changeMonth = (offset: number) => {
   currentDate.value = currentDate.value.add(offset, 'month')
   fetchLunarData()
 }
 
-// 跳转到今天
 const goToToday = () => {
   currentDate.value = dayjs()
   selectedDate.value = dayjs().format('YYYY-MM-DD')
@@ -105,7 +89,6 @@ const goToToday = () => {
   viewDetails(dayjs())
 }
 
-// 用户手动选择日期
 const onDateChange = () => {
   const date = dayjs(selectedDateInput.value)
   currentDate.value = date
@@ -114,9 +97,8 @@ const onDateChange = () => {
   viewDetails(date)
 }
 
-// 请求农历数据
 const fetchLunarData = async () => {
-  lunarData.value = {} // 清空旧数据
+  lunarData.value = {}
   try {
     const start = currentDate.value.startOf('month').format('YYYY-MM-DD')
 
@@ -134,7 +116,6 @@ const fetchLunarData = async () => {
   }
 }
 
-// 查看某日期的详细信息
 const viewDetails = (date: dayjs.Dayjs) => {
   const dateKey = date.format('YYYY-MM-DD')
   const lunarInfo = lunarData.value[dateKey]

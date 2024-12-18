@@ -56,17 +56,14 @@ interface LoginResponse {
   token: string;
 }
 
-// 去掉字符串两边的引号
 function removeQuotesWithRegex (str: string): string {
   return str.replace(/^"(.*)"$/, '$1')
 }
 
-// 提交表单的方法
 const onFinish = async (values: FormState) => {
   try {
     const response = await ApiService.post<LoginResponse, FormState>('/login', values)
 
-    // 存储 token 到 localStorage
     if (response.token) {
       localStorage.setItem('authToken', response.token)
       const user = jwtDecode<{ sub: string }>(response.token)
@@ -74,7 +71,6 @@ const onFinish = async (values: FormState) => {
       localStorage.setItem('currentUser', username)
     }
 
-    // 登录成功后跳转到主页
     router.push('/')
   } catch (error) {
     console.error('Login failed: ', error)
@@ -82,7 +78,6 @@ const onFinish = async (values: FormState) => {
   }
 }
 
-// 表单提交失败的处理
 const onFinishFailed = (errorInfo: unknown) => {
   console.log('Failed: ', errorInfo)
   alert('Form submission failed, please check your inputs.')
