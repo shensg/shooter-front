@@ -124,6 +124,7 @@ const toggleCollapsed = () => {
 
 const logout = () => {
   localStorage.removeItem('authToken')
+  localStorage.removeItem('currentUser')
   router.push('/login')
 }
 </script>

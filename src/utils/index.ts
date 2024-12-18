@@ -32,6 +32,7 @@ class ApiService {
         if (error.response?.status === 401) {
           console.error('Unauthorized, redirecting to login...')
           localStorage.removeItem('authToken') // 清理 token
+          localStorage.removeItem('currentUser') // 清理 token
           window.location.href = '/login'
         } else {
           console.error('API request error:', error.message || error)

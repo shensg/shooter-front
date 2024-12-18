@@ -56,19 +56,13 @@ interface LoginResponse {
   token: string;
 }
 
-function removeQuotesWithRegex (str: string): string {
-  return str.replace(/^"(.*)"$/, '$1')
-}
-
 const onFinish = async (values: FormState) => {
   try {
     const response = await ApiService.post<LoginResponse, FormState>('/login', values)
 
     if (response.token) {
       localStorage.setItem('authToken', response.token)
-      const user = jwtDecode<{ sub: string }>(response.token)
-      const username = removeQuotesWithRegex(user.sub)
-      localStorage.setItem('currentUser', username)
+      localStorage.setItem('currentUser', values.username)
     }
 
     router.push('/')
