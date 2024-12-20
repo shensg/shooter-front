@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="actions">
-        <!-- <a-button type="link" href="/profile/setting">Settings</a-button> -->
+        <a-button type="link" href="/profile">Settings</a-button>
         <a-button
           class="logout-button"
           type="primary"
@@ -58,7 +58,7 @@ import {
   MenuUnfoldOutlined,
   MailOutlined,
   CloudOutlined,
-  AppstoreOutlined
+  SettingOutlined
 } from '@ant-design/icons-vue'
 
 const router = useRouter()
@@ -81,8 +81,8 @@ const items = reactive([
   {
     key: '2',
     icon: () => h(UserOutlined),
-    label: 'Profile',
-    onClick: () => router.push('/profile')
+    label: 'UserManager',
+    onClick: () => router.push('/usermanager')
   },
   {
     key: '3',
@@ -101,11 +101,13 @@ const items = reactive([
   },
   {
     key: 'sub2',
-    icon: () => h(AppstoreOutlined),
-    label: 'Navigation Two',
+    icon: () => h(SettingOutlined),
+    label: 'Settings',
     children: [
-      { key: '9', label: 'Option 9' },
-      { key: '10', label: 'Option 10' }
+      { key: '9', label: 'UserManager' },
+      { key: '10', label: 'RoleSettings' },
+      { key: '11', label: 'RoutingSettings' },
+      { key: '12', label: 'SecretManager' }
     ]
   }
 ])

@@ -38,7 +38,6 @@
 import { reactive } from 'vue'
 import ApiService from '@/utils'
 import router from '@/router'
-import { jwtDecode } from 'jwt-decode'
 
 interface FormState {
   username: string;

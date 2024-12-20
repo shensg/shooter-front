@@ -14,17 +14,27 @@
   <div class="formt-content" v-if="activeInput">
     <a-textarea
       v-model:value="value"
-      :rows="14"
+      :rows="12"
       :placeholder="inputPlaceholder"
       :maxlength="2048"
     />
+    <a-checkbox v-model:checked="formState.esastated">ESA</a-checkbox>
     <a-button type="primary" class="submit-button" @click="submitInput">提交</a-button>
+  </div>
+
+  <div class="formt-content" v-if="activeInput">
+    <h3>{{ activeInput }}上次刷新：{{ formRefreshRecord.createAt }}</h3>
+    <ul>
+      <li v-for="(item, index) in formRefreshRecord.record" :key="index">
+        {{ item }}
+      </li>
+    </ul>
   </div>
 </template>
 
 <script lang="ts" setup>
 import ApiService from '@/utils'
-import { ref, computed } from 'vue'
+import { reactive, ref, computed, watch, onMounted } from 'vue'
 
 interface ApiResponse<T> {
   code: number
@@ -32,8 +42,26 @@ interface ApiResponse<T> {
   msg: string
 }
 
+interface FormState {
+  esastated: boolean;
+}
+
+const formState = reactive<FormState>({
+  esastated: false
+})
+
+interface RefreshRecord<T = unknown> {
+  createAt: Date;
+  record: T[];
+}
+
+const formRefreshRecord = ref<RefreshRecord>({
+  createAt: new Date(),
+  record: []
+})
+
 const value = ref('')
-const activeInput = ref<'aliyun' | 'cloudflare'>('aliyun')
+const activeInput = ref<'aliyun' | 'cloudflare'>('cloudflare')
 
 const setActiveInput = (type: 'aliyun' | 'cloudflare') => {
   activeInput.value = type
@@ -51,7 +79,7 @@ const submitInput = async () => {
     .map(item => item.trim())
     .filter(item => item)
 
-  const postData = { code: 200, data: valueList, msg: '' }
+  const postData = { code: 200, data: { stated: formState.esastated, data: valueList }, msg: '' }
   const platform = activeInput.value
 
   try {
@@ -64,7 +92,7 @@ const submitInput = async () => {
     )
 
     if (response.code === 200) {
-      alert(`提交成功！\n${platform === 'aliyun' ? '阿里云' : 'CloudFlare'} 内容：\n${valueList}`)
+      alert(`提交成功！最快30秒内生效！\n${platform === 'aliyun' ? '阿里云' : 'CloudFlare'} 内容：\n${valueList}`)
       value.value = ''
     } else {
       alert(`提交异常！\n内容：\n${valueList}`)
@@ -74,10 +102,38 @@ const submitInput = async () => {
   }
 }
 
+const getRefreshRecord = async () => {
+  const platform = activeInput.value
+
+  try {
+    const endpoint =
+      platform === 'aliyun' ? '/refresh/record/aliyun' : '/refresh/record/cloudflare'
+
+    const response = await ApiService.get<ApiResponse<RefreshRecord>>(endpoint, { platform })
+
+    if (response.code === 200) {
+      formRefreshRecord.value = response.data
+    } else {
+      console.error(`获取刷新记录失败：${response.msg}`)
+    }
+  } catch (error) {
+    console.error('获取刷新历史记录失败！错误：', error)
+  }
+}
+
+// 监听 activeInput 的变化，自动调用 getRefreshRecord
+watch(activeInput, () => {
+  getRefreshRecord()
+})
+
+onMounted(() => {
+  getRefreshRecord()
+})
+
 const inputPlaceholder = computed(() =>
   activeInput.value === 'aliyun'
-    ? '请输入需要刷新的完整地址！！！\n阿里云CDN：http://example.com/cat/a.png'
-    : '请输入需要刷新的完整地址！！！\nCloudFlareCDN：https://example.com/cat/a.png'
+    ? '请不要同时提交不同域名链接，同时提交不同域名链接可能会失败！！！\n阿里云CDN：http://example.com/cat/a.png'
+    : '请不要同时提交不同域名链接，同时提交不同域名链接可能会失败！！！\nCloudFlareCDN：https://example.com/cat/a.png'
 )
 </script>
 
