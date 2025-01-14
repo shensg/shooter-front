@@ -22,6 +22,12 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/RefreshCdnView.vue'), // Use Layout here for the home route
     meta: { requiresAuth: true }
   },
+  // {
+  //   path: '/role',
+  //   name: 'role',
+  //   component: () => import('@/views/RoleView.vue'), // Use Layout here for the home route
+  //   meta: { requiresAuth: true }
+  // },
   {
     path: '/login',
     name: 'login',

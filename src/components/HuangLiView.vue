@@ -7,7 +7,7 @@
     </div>
 
     <div class="calendar-actions">
-      <button @click="goToToday">跳转到今天</button>
+      <button @click="goToToday">今天</button>
       <input type="date" v-model="selectedDateInput" @change="onDateChange" />
     </div>
 

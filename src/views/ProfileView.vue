@@ -1,7 +1,7 @@
 <template>
   <div class="personal-center-layout">
     <main class="user-info">
-      <a-avatar :size="128" :src="formState.titleUrl" />
+      <a-avatar :size="128">{{ formState.roleName }}</a-avatar>
       <h2>{{ formState.username }}</h2>
       <h4>{{ formState.nickname }}</h4>
       <p>简介：{{ formState.describe }}</p>
@@ -23,9 +23,9 @@
         <a-form-item name= "email" label="Email" >
           <a-input v-model:value="formState.email" />
         </a-form-item>
-        <a-form-item name="titleUrl" label="头像地址" >
+        <!-- <a-form-item name="titleUrl" label="头像地址" >
           <a-input v-model:value="formState.titleUrl" />
-        </a-form-item>
+        </a-form-item> -->
         <a-form-item name="describe" label="描述" >
           <a-input v-model:value="formState.describe" />
         </a-form-item>
@@ -56,7 +56,7 @@ interface User {
   username: string;
   nickname: string;
   email: string;
-  titleUrl: string;
+  roleName: string;
   describe: string;
 }
 
@@ -65,7 +65,7 @@ const formState = ref<User>({
   username: 'admin',
   nickname: '',
   email: '',
-  titleUrl: '',
+  roleName: '',
   describe: ''
 })
 

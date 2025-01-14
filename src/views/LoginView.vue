@@ -84,5 +84,10 @@ const onFinishFailed = (errorInfo: unknown) => {
   align-items: center;
   height: 100vh;
   background-color: #f0f2f5;
+  background-image: url('@/assets/login-logo.png'); /* 确保图片路径正确 */
+  background-size: cover; /* 背景图像覆盖整个容器 */
+  background-position: center; /* 居中对齐背景图像 */
+  background-repeat: no-repeat; /* 不重复背景图像 */
+  padding-top: 10%;
 }
 </style>

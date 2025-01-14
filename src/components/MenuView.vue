@@ -80,15 +80,15 @@ const items = reactive([
   },
   {
     key: '2',
-    icon: () => h(UserOutlined),
-    label: 'UserManager',
-    onClick: () => router.push('/usermanager')
-  },
-  {
-    key: '3',
     icon: () => h(CloudOutlined),
     label: 'RefreshCDN',
     onClick: () => router.push('/refreshcdn')
+  },
+  {
+    key: '3',
+    icon: () => h(UserOutlined),
+    label: 'UserManager',
+    onClick: () => router.push('/usermanager')
   },
   {
     key: 'sub1',

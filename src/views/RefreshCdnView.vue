@@ -106,10 +106,7 @@ const getRefreshRecord = async () => {
   const platform = activeInput.value
 
   try {
-    const endpoint =
-      platform === 'aliyun' ? '/refresh/record/aliyun' : '/refresh/record/cloudflare'
-
-    const response = await ApiService.get<ApiResponse<RefreshRecord>>(endpoint, { platform })
+    const response = await ApiService.get<ApiResponse<RefreshRecord>>('/refresh/record/get', { platform })
 
     if (response.code === 200) {
       formRefreshRecord.value = response.data
@@ -132,7 +129,7 @@ onMounted(() => {
 
 const inputPlaceholder = computed(() =>
   activeInput.value === 'aliyun'
-    ? '请不要同时提交不同域名链接，同时提交不同域名链接可能会失败！！！\n阿里云CDN：http://example.com/cat/a.png'
+    ? '请不要同时提交不同域名链接，同时提交不同域名链接可能会失败！！！\n阿里云CDN：http://example.com/cat/\n最多每次提交10个链接，建议刷新文件夹！！！\n刷新时文件和文件夹不能放在一起刷新'
     : '请不要同时提交不同域名链接，同时提交不同域名链接可能会失败！！！\nCloudFlareCDN：https://example.com/cat/a.png'
 )
 </script>
